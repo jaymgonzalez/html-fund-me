@@ -8,3 +8,7 @@ async function connect() {
       'Please install metamask'
   }
 }
+
+async function fund(ethAmount) {
+  console.log(`Funding: ${ethAmount}`)
+}
