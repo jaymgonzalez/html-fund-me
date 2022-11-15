@@ -3,14 +3,7 @@
 <head>
   <title>Fund Me App</title>
 </head>
-<script>
-  async function connect() { 
-  if (typeof window.ethereum !== "undefined") {
-    window.ethereum.request({ method: 'eth_requestAccounts' })
-  } else {
-    console.log('No metamask!');
-  }
-}
+<script src="./index.js" type="text/javascript">
 </script>
 <body>
   <button id="connectButton" onclick="connect()"> Connect </button>
