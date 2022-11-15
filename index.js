@@ -18,14 +18,29 @@ async function connect() {
 }
 
 async function fund() {
-  const ethAmount = '0.1'
+  const ethAmount = '1'
   if (typeof window.ethereum !== 'undefined') {
-    console.log(`Funding: ${ethAmount}`)
+    console.log(`Funding: ${ethAmount} ETH`)
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     const signer = provider.getSigner()
     const contract = new ethers.Contract(contractAddress, abi, signer)
-    const txRespone = await contract.fund({
-      value: ethers.utils.parseEther(ethAmount),
-    })
+    try {
+      const txResponse = await contract.fund({
+        value: ethers.utils.parseEther(ethAmount),
+      })
+      await listenForTransactionMined(txResponse, provider)
+    } catch (err) {
+      console.error(err)
+    }
   }
+}
+
+function listenForTransactionMined(txResponse, provider) {
+  console.log(`Mining ${txResponse.hash}`)
+  return new Promise((resolve, reject) => {
+    provider.once(txResponse.hash, (txReceipt) => {
+      console.log(`Completed with ${txReceipt.confirmations} confirmations`)
+    })
+    resolve()
+  })
 }
