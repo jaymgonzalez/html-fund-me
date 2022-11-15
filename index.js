@@ -1,4 +1,5 @@
 import { ethers } from './ethers.js'
+import { abi, contractAddress } from './constants.js'
 
 const connectButton = document.getElementById('connectButton')
 const fundButton = document.getElementById('fundButton')
@@ -16,12 +17,15 @@ async function connect() {
   }
 }
 
-async function fund(ethAmount) {
+async function fund() {
+  const ethAmount = '0.1'
   if (typeof window.ethereum !== 'undefined') {
     console.log(`Funding: ${ethAmount}`)
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     const signer = provider.getSigner()
-    console.log(signer)
-    // const contract
+    const contract = new ethers.Contract(contractAddress, abi, signer)
+    const txRespone = await contract.fund({
+      value: ethers.utils.parseEther(ethAmount),
+    })
   }
 }
